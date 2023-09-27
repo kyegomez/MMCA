@@ -1,7 +1,6 @@
 import torch 
 from mmca.main import SimpleMMCA
 
-
 # Define the dimensions
 dim = 512
 head = 8

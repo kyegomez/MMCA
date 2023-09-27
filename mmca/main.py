@@ -1,7 +1,8 @@
-import torch 
-from torch import nn
-from einops import rearrange
+import torch
 import torch.nn.functional as F
+from einops import rearrange
+from torch import nn
+
 # from zeta.nn import FlashAttention
 
 class MultiModalCausalAttention(nn.Module):
@@ -103,6 +104,7 @@ class SimpleMMCA(nn.Module):
             embed_dim=dim, 
             num_heads=heads
         )
+        
         self.cross_attn = nn.MultiheadAttention(
             embed_dim=dim, 
             num_heads=heads
