@@ -2,6 +2,7 @@ import torch
 from torch import nn
 from einops import rearrange
 import torch.nn.functional as F
+# from zeta.nn import FlashAttention
 
 class MultiModalCausalAttention(nn.Module):
     def __init__(

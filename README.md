@@ -13,8 +13,24 @@ The open source community's implementation of the all-new Multi-Modal Causal Att
 
 
 # Install
+`pip install mmca`
 
 # Usage
+```python
+import torch 
+from mmca.main import MultiModalCausalAttention
+
+
+attn = MultiModalCausalAttention(dim=512, heads=8)
+
+x = torch.randn(1, 10, 512)
+y = torch.randn(1, 20, 512)
+
+x, y = attn(x, y)
+
+print(x)
+print(y)
+```
 
 # Architecture
 
