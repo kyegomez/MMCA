@@ -11,7 +11,6 @@ class MultiModalCausalAttention(nn.Module):
         dim,
         heads=8,
         dropout=0.1,
-
     ):
         super().__init__()
         self.heads = heads
@@ -108,6 +107,39 @@ class SimpleMMCA(nn.Module):
         self.cross_attn = nn.MultiheadAttention(
             embed_dim=dim, 
             num_heads=heads
+        )
+    
+    def forward(self, v, t):
+        #self attention for visual tokens
+        v = self.self_attn(v, v, v)[0]
+
+        #cross attention for textual tokens
+        t = self.cross_attn(t, t, t)[0] + self.cross_attn(t, v, v)[0]
+
+        return t
+
+
+from zeta.nn import FlashAttention
+
+class ZetaMMCA(nn.Module):
+    def __init__(
+        self,
+        flash=True,
+        causal=True,
+        dropout=0.1,
+    ):
+        super().__init__()
+        
+        self.self_attn = FlashAttention(
+            flash=flash,
+            causal=causal,
+            dropout=dropout,
+        )
+        
+        self.cross_attn = FlashAttention(
+            flash=flash,
+            causal=causal,
+            dropout=dropout,
         )
     
     def forward(self, v, t):
