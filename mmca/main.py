@@ -3,8 +3,6 @@ import torch.nn.functional as F
 from einops import rearrange
 from torch import nn
 
-# from zeta.nn import FlashAttention
-
 class MultiModalCausalAttention(nn.Module):
     def __init__(
         self,
@@ -61,6 +59,7 @@ class MultiModalCausalAttention(nn.Module):
 
             mask = mask[:, None, :] * mask[:, :, None]
             dots_textual.masked_fill(~mask, float("-inf"))
+
             del mask
         
         attn_visual = dots_visual.softmax(dim=-1)
@@ -119,34 +118,34 @@ class SimpleMMCA(nn.Module):
         return t
 
 
-from zeta.nn import FlashAttention
+# from zeta.nn import FlashAttention
 
-class ZetaMMCA(nn.Module):
-    def __init__(
-        self,
-        flash=True,
-        causal=True,
-        dropout=0.1,
-    ):
-        super().__init__()
+# class ZetaMMCA(nn.Module):
+#     def __init__(
+#         self,
+#         flash=True,
+#         causal=True,
+#         dropout=0.1,
+#     ):
+#         super().__init__()
         
-        self.self_attn = FlashAttention(
-            flash=flash,
-            causal=causal,
-            dropout=dropout,
-        )
-        
-        self.cross_attn = FlashAttention(
-            flash=flash,
-            causal=causal,
-            dropout=dropout,
-        )
+#         self.self_attn = FlashAttention(
+#             flash=flash,
+#             causal=causal,
+#             dropout=dropout,
+#         )
+
+#         self.cross_attn = FlashAttention(
+#             flash=flash,
+#             causal=causal,
+#             dropout=dropout,
+#         )
     
-    def forward(self, v, t):
-        #self attention for visual tokens
-        v = self.self_attn(v, v, v)[0]
+#     def forward(self, v, t):
+#         #self attention for visual tokens
+#         v = self.self_attn(v, v, v)[0]
 
-        #cross attention for textual tokens
-        t = self.cross_attn(t, t, t)[0] + self.cross_attn(t, v, v)[0]
+#         #cross attention for textual tokens
+#         t = self.cross_attn(t, t, t)[0] + self.cross_attn(t, v, v)[0]
 
-        return t
+#         return t
